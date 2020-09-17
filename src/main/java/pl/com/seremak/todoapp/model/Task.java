@@ -1,4 +1,4 @@
-package pl.com.seremak.todoapp;
+package pl.com.seremak.todoapp.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,6 +24,14 @@ public class Task {
 
     // == methods ==
     // -- getters & setters --
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -40,7 +48,4 @@ public class Task {
         this.done = done;
     }
 
-    public int getId() {
-        return id;
-    }
 }
