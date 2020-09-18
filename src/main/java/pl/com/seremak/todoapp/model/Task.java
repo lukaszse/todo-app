@@ -10,7 +10,7 @@ public class Task {
 
     // == fields ==
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotBlank(message = "Task's description mustn't be empty")
