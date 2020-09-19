@@ -16,6 +16,8 @@ public class ProjectSteps {
 
     int daysToDeadline;
 
+    // TODO relation to be added !!!
+
     ProjectSteps() {
     }
 
