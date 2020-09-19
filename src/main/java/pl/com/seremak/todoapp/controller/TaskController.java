@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.com.seremak.todoapp.model.TaskRepository;
 import pl.com.seremak.todoapp.model.Task;
@@ -42,9 +43,25 @@ public class TaskController {
         if(!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
+        repository.findById(id)
+                .ifPresent(task -> {
+                    task.updateFrom(toUpdate);
+                    repository.save(task);
+                });
+        return ResponseEntity.noContent().build();
+    }
 
-        toUpdate.setId(id);
-        repository.save(toUpdate);
+
+    @Transactional
+    @PatchMapping ("/tasks/{id}")
+    public ResponseEntity<?> toggleTask(@PathVariable int id) {
+        logger.warn("patch method invoked");
+
+        if(!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        repository.findById(id)
+                .ifPresent(task -> task.setDone(!task.isDone()));
         return ResponseEntity.noContent().build();
     }
 
@@ -57,10 +74,11 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    ResponseEntity<Task> postTask(@RequestBody @Valid Task newTask) {
+    ResponseEntity<Task> createTask(@RequestBody @Valid Task newTask) {
 
         Task task = repository.save(newTask);
         return ResponseEntity.created(URI.create("/" + task.getId())).body(task);
     }
+
 
 }
