@@ -1,6 +1,7 @@
 package pl.com.seremak.todoapp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -12,10 +13,14 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @NotBlank(message = "Project's description musn't be empty")
     String description;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "project")
     private Set<TaskGroup> groups;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "project")
+    private Set<ProjectStep> steps;
 
     // == constructors ==
     Project() {
@@ -37,4 +42,22 @@ public class Project {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    Set<TaskGroup> getGroups() {
+        return groups;
+    }
+
+    void setGroups(Set<TaskGroup> groups) {
+        this.groups = groups;
+    }
+
+    Set<ProjectStep> getSteps() {
+        return steps;
+    }
+
+    void setSteps(Set<ProjectStep> steps) {
+        this.steps = steps;
+    }
+
+
 }

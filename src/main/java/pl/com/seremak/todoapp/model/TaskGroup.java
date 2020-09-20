@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "task_group")
+@Table(name = "task_groups")
 public class TaskGroup {
 
     // == fields ==
@@ -24,7 +24,7 @@ public class TaskGroup {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
-    Project project;
+    private Project project;
 
     // == constructors ==
     public TaskGroup() {
@@ -63,6 +63,14 @@ public class TaskGroup {
 
     void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    Project getProject() {
+        return project;
+    }
+
+    void setProject(Project project) {
+        this.project = project;
     }
 
     // -- other methods --

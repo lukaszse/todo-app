@@ -4,8 +4,8 @@ create table projects(
     description varchar(100)
 );
 
-alter table task_group add column projects_id int null;
-alter table task_group add foreign key (projects_id) references projects (id);
+alter table task_groups add column project_id int null;
+alter table task_groups add foreign key (project_id) references projects (id);
 
 drop table if exists project_steps;
 create table project_steps(

@@ -18,6 +18,6 @@ public class TempService {
         return repository.findAll().stream()
                 .flatMap(taskGroup -> taskGroup.getTasks().stream())
                         .map(Task::getDescription)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList());
     }
 }

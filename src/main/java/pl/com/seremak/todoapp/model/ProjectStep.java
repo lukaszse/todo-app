@@ -1,24 +1,26 @@
 package pl.com.seremak.todoapp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "project_steps")
-public class ProjectSteps {
+public class ProjectStep {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @NotBlank(message = "Poject steps's description cannot be empty")
     String description;
-
-    int projectId;
 
     int daysToDeadline;
 
-    // TODO relation to be added !!!
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
-    ProjectSteps() {
+    ProjectStep() {
     }
 
     public int getId() {
@@ -37,14 +39,6 @@ public class ProjectSteps {
         this.description = description;
     }
 
-    public int getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
     public int getDaysToDeadline() {
         return daysToDeadline;
     }
@@ -52,4 +46,14 @@ public class ProjectSteps {
     public void setDaysToDeadline(int daysToDeadline) {
         this.daysToDeadline = daysToDeadline;
     }
+
+    Project getProject() {
+        return project;
+    }
+
+    void setProject(Project project) {
+        this.project = project;
+    }
+
+
 }
