@@ -31,9 +31,13 @@ public class Task {
 
 
     // == constructors ==
-    public Task() {
+    Task() {
     }
 
+    public Task(String description, LocalDateTime deadline) {
+        this.description = description;
+        this.deadline = deadline;
+    }
 
     // == methods ==
     // -- getters & setters --
