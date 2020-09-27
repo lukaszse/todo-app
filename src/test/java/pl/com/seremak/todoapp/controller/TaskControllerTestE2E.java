@@ -1,21 +1,18 @@
 package pl.com.seremak.todoapp.controller;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
 import pl.com.seremak.todoapp.model.Task;
 import pl.com.seremak.todoapp.model.TaskRepository;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
-@ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TaskControllerTestE2E {
 
@@ -32,6 +29,7 @@ class TaskControllerTestE2E {
     void httpGet_returnsAllTasks() {
 
         // given
+        var initialSize = taskRepo.findAll().size();
         taskRepo.save(new Task("example description 1", LocalDateTime.now()));
         taskRepo.save(new Task("example description 2", LocalDateTime.now()));
 
@@ -40,7 +38,7 @@ class TaskControllerTestE2E {
 
 
         // then
-        assertThat(result).hasSize(2);
+        assertThat(result).hasSize(initialSize + 2);
     }
 
 }
