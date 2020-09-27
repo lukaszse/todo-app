@@ -15,21 +15,21 @@ public class TaskGroupService {
 
 
     // == fields ==
-    private TaskGroupRepository repository;
+    private TaskGroupRepository taskGroupRepository;
     private TaskRepository taskRepository;
 
-    TaskGroupService(TaskGroupRepository repository, TaskRepository taskRepository) {
-        this.repository = repository;
+    TaskGroupService(TaskGroupRepository taskGroupRepository, TaskRepository taskRepository) {
+        this.taskGroupRepository = taskGroupRepository;
         this.taskRepository = taskRepository;
     }
 
     public GroupReadModel createGroup(GroupWriteModel source) {
-        TaskGroup result = repository.save(source.toGroup());
+        TaskGroup result = taskGroupRepository.save(source.toGroup());
         return new GroupReadModel(result);
     }
 
     public List<GroupReadModel> readAll() {
-        return repository.findAll()
+        return taskGroupRepository.findAll()
                 .stream()
                 .map(GroupReadModel::new)
                 .collect(Collectors.toList());
@@ -40,9 +40,9 @@ public class TaskGroupService {
             throw new IllegalStateException("Group has undone task. Done all task first");
         }
 
-        TaskGroup result = repository.findById(groupId)
+        TaskGroup result = taskGroupRepository.findById(groupId)
                 .orElseThrow(()-> new IllegalArgumentException("TaskGroup with given id not found"));
         result.setDone(!result.isDone());
-        repository.save(result);
+        taskGroupRepository.save(result);
     }
 }
