@@ -1,6 +1,7 @@
 package pl.com.seremak.todoapp.logic;
 
 import org.springframework.stereotype.Service;
+import pl.com.seremak.todoapp.model.Project;
 import pl.com.seremak.todoapp.model.TaskGroup;
 import pl.com.seremak.todoapp.model.TaskGroupRepository;
 import pl.com.seremak.todoapp.model.TaskRepository;
@@ -24,9 +25,15 @@ public class TaskGroupService {
     }
 
     public GroupReadModel createGroup(GroupWriteModel source) {
+        return createGroup(source, null);
+    }
+
+
+    GroupReadModel createGroup(final GroupWriteModel source, final Project project) {
         TaskGroup result = taskGroupRepository.save(source.toGroup());
         return new GroupReadModel(result);
     }
+
 
     public List<GroupReadModel> readAll() {
         return taskGroupRepository.findAll()
@@ -45,4 +52,6 @@ public class TaskGroupService {
         result.setDone(!result.isDone());
         taskGroupRepository.save(result);
     }
+
+
 }

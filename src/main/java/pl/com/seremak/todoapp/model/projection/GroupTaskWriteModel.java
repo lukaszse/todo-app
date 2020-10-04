@@ -1,6 +1,7 @@
 package pl.com.seremak.todoapp.model.projection;
 
 import pl.com.seremak.todoapp.model.Task;
+import pl.com.seremak.todoapp.model.TaskGroup;
 
 import java.time.LocalDateTime;
 
@@ -28,7 +29,7 @@ public class GroupTaskWriteModel {
         this.deadline = deadline;
     }
 
-    public Task toTask() {
-        return  new Task(description, deadline);
+    public Task toTask(TaskGroup result) {
+        return  new Task(description, deadline, result);
     }
 }

@@ -14,4 +14,5 @@ public interface SqlProjectRepository extends ProjectRepository, JpaRepository<P
     @Override
     @Query("from Project p join fetch p.steps")
     List<Project> findAll();
+
 }

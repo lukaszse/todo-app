@@ -6,37 +6,42 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.com.seremak.todoapp.logic.TaskService;
 import pl.com.seremak.todoapp.model.TaskRepository;
 import pl.com.seremak.todoapp.model.Task;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
+@RequestMapping("/tasks")
 public class TaskController {
 
     public static final Logger logger = LoggerFactory.getLogger(TaskController.class);
     private final TaskRepository repository;
+    private final TaskService service;
 
-    TaskController(TaskRepository repository) {
+    TaskController(TaskRepository repository, TaskService service) {
         this.repository = repository;
+        this.service = service;
     }
 
-    @GetMapping(value = "/tasks", params = {"!sort", "!page", "!size"})
-    ResponseEntity<List<Task>> readAllTasks() {
+    @GetMapping(params = {"!sort", "!page", "!size"})
+    CompletableFuture<ResponseEntity<List<Task>>> readAllTasks() {
         logger.warn("exposing all the task");
-        return ResponseEntity.ok(repository.findAll());
+        return service.findAllAsync().thenApply(ResponseEntity::ok);
     }
 
-    @GetMapping("/tasks")
+    @GetMapping
     ResponseEntity<List<Task>> readAllTasks(Pageable page) {
         logger.warn("custom pagable");
         return ResponseEntity.ok(repository.findAll(page).getContent());
     }
 
-    @PutMapping("/tasks/{id}")
+    @PutMapping("/{id}")
     ResponseEntity<?> updateTask(@PathVariable int id, @RequestBody @Valid Task toUpdate) {
         logger.warn("put method invoked");
 
@@ -53,7 +58,7 @@ public class TaskController {
 
 
     @Transactional
-    @PatchMapping ("/tasks/{id}")
+    @PatchMapping ("/{id}")
     public ResponseEntity<?> toggleTask(@PathVariable int id) {
         logger.warn("patch method invoked");
 
@@ -65,7 +70,7 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/tasks/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Task> getTask(@PathVariable int id) {
 
         return repository.findById(id)
@@ -73,12 +78,18 @@ public class TaskController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/tasks")
+    @PostMapping
     ResponseEntity<Task> createTask(@RequestBody @Valid Task newTask) {
 
         Task task = repository.save(newTask);
         return ResponseEntity.created(URI.create("/" + task.getId())).body(task);
     }
 
+    @GetMapping(value = "/search/done")
+    ResponseEntity<List<Task>> readDoneTasks(@RequestParam(defaultValue = "true") boolean state) {
+        return ResponseEntity.ok(
+                repository.findByDone(state)
+        );
+    }
 
 }
