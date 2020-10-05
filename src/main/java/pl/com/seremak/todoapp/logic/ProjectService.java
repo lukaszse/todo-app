@@ -1,15 +1,18 @@
 package pl.com.seremak.todoapp.logic;
 
+import org.springframework.stereotype.Service;
 import pl.com.seremak.todoapp.TaskConfigurationProperties;
 import pl.com.seremak.todoapp.model.*;
 import pl.com.seremak.todoapp.model.projection.GroupReadModel;
 import pl.com.seremak.todoapp.model.projection.GroupTaskWriteModel;
 import pl.com.seremak.todoapp.model.projection.GroupWriteModel;
+import pl.com.seremak.todoapp.model.projection.ProjectWriteModel;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ProjectService {
 
     // == fields ==
@@ -31,8 +34,8 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public void create(Project project) {
-        projectRepository.save(project);
+    public void create(ProjectWriteModel newProject) {
+        projectRepository.save(newProject.toProject());
     }
 
     public GroupReadModel createGroup(LocalDateTime deadline, int projectId) {

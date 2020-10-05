@@ -30,7 +30,7 @@ public class TaskGroupService {
 
 
     GroupReadModel createGroup(final GroupWriteModel source, final Project project) {
-        TaskGroup result = taskGroupRepository.save(source.toGroup());
+        TaskGroup result = taskGroupRepository.save(source.toGroup(project));
         return new GroupReadModel(result);
     }
 

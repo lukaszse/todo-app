@@ -45,7 +45,7 @@ public class TaskGroupController {
     @PostMapping
     ResponseEntity<GroupReadModel> createGroup (@RequestBody @Valid GroupWriteModel newGroupWriteModel) {
         var group = taskGroupService.createGroup(newGroupWriteModel);
-        return ResponseEntity.created(URI.create("/")).body(group);
+        return ResponseEntity.created(URI.create("/" + group.getId())).body(group);
     }
 
     @Transactional
@@ -55,5 +55,14 @@ public class TaskGroupController {
         return ResponseEntity.noContent().build();
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseEntity<String> handleIllegalArgumeny(IllegalArgumentException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    ResponseEntity<String> handleIllegalState(IllegalStateException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 
 }

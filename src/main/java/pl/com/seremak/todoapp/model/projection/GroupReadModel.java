@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class GroupReadModel {
 
     // == fields ==
+    private int id;
     private String description;
 
     /*
@@ -22,6 +23,7 @@ public class GroupReadModel {
 
     // == constructors ==
     public GroupReadModel(TaskGroup source) {
+        this.id = source.getId();
         this.description = source.getDescription();
         source.getTasks()
                 .stream()
@@ -58,5 +60,13 @@ public class GroupReadModel {
 
     public void setTasks(Set<GroupTaskReadModel> tasks) {
         this.tasks = tasks;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

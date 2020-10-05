@@ -11,10 +11,10 @@ public class Project {
     // == fields ==
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
 
     @NotBlank(message = "Project's description musn't be empty")
-    String description;
+    private String description;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "project")
     private Set<TaskGroup> groups;
@@ -23,7 +23,7 @@ public class Project {
     private Set<ProjectStep> steps;
 
     // == constructors ==
-    Project() {
+    public Project() {
     }
 
     // == methods ==
@@ -55,7 +55,7 @@ public class Project {
         return steps;
     }
 
-    void setSteps(Set<ProjectStep> steps) {
+    public void setSteps(Set<ProjectStep> steps) {
         this.steps = steps;
     }
 
