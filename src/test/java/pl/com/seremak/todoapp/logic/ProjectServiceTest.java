@@ -202,6 +202,12 @@ class ProjectServiceTest {
             map.put(entity.getId(), entity);
             return entity;
           }
+
+        @Override
+        public boolean existsByDescription(String description) {
+            return map.values().stream()
+                    .anyMatch(taskGroup -> taskGroup.getDescription().equals(description));
+        }
     }
 
 }

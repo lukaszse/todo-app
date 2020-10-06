@@ -90,21 +90,21 @@ class TaskGroupServiceTest {
     private static class InMemoryGroupRepo implements TaskGroupRepository{
 
         private int index = 0;
-        private Map<Integer, TaskGroup> map = new HashMap<>();
+        private Map<Integer, TaskGroup> groupsMap = new HashMap<>();
 
         public int count() {
-            return map.values().size();
+            return groupsMap.values().size();
         }
 
 
         @Override
         public List<TaskGroup> findAll() {
-            return new ArrayList<>(map.values());
+            return new ArrayList<>(groupsMap.values());
         }
 
 
         public boolean existsByDoneIsFalseAndProject_Id(Integer projectId) {
-            return map.values().stream()
+            return groupsMap.values().stream()
                     .filter(taskGroup -> !taskGroup.isDone())
                     .anyMatch(taskGroup ->
                             taskGroup.getProject() != null && taskGroup.getProject().getId() == projectId);
@@ -112,7 +112,7 @@ class TaskGroupServiceTest {
 
         @Override
         public Optional<TaskGroup> findById(Integer id) {
-            return Optional.ofNullable(map.get(id));
+            return Optional.ofNullable(groupsMap.get(id));
         }
 
         @Override
@@ -126,8 +126,15 @@ class TaskGroupServiceTest {
                     throw new RuntimeException(e);
                 }
             }
-            map.put(entity.getId(), entity);
+            groupsMap.put(entity.getId(), entity);
             return entity;
+        }
+
+        @Override
+        public boolean existsByDescription(String description) {
+            return groupsMap.values()
+                    .stream()
+                    .anyMatch(taskGroup -> taskGroup.getDescription().equals(description));
         }
     }
 

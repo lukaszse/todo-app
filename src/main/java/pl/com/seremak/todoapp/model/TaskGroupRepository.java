@@ -13,4 +13,6 @@ public interface TaskGroupRepository {
 
     TaskGroup save(TaskGroup entity);
 
+    boolean existsByDescription(String description);
+
 }
